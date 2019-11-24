@@ -13,6 +13,10 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <GLUT/glut.h>
+#include <QTimer>
+#include <QElapsedTimer>
+#include "Ball.h"
+
 #else
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -25,9 +29,18 @@ public:
 protected:
     void initializeGL() override;
 
+    void startLoop();
+
+    void loop();
+
     void resizeGL(int w, int h) override;
 
     void paintGL() override;
+
+    bool isDone;
+    QTimer timer;
+    QElapsedTimer elapsed_timer;
+    GLfloat delta_time;
 };
 
 

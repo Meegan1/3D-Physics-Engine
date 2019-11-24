@@ -6,12 +6,13 @@ set(CMAKE_CXX_STANDARD 14)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
+find_package(GLM REQUIRED)
 
 
 
-add_executable(Assignment_2 main.cpp RenderWindow.cpp RenderWindow.h)
+add_executable(Assignment_2 main.cpp RenderWindow.cpp RenderWindow.h Ball.cpp Ball.h Camera.cpp Camera.h PhysicsEngine.cpp PhysicsEngine.h RigidBody.h)
 
 target_link_libraries(Assignment_2 Qt5::Widgets)
 
-include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
+include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} ${GLM_INCLUDE_DIRS} )
 target_link_libraries(Assignment_2 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
