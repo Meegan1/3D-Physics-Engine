@@ -8,6 +8,7 @@
 
 #include <gltypes.h>
 #include <glm/glm.hpp>
+#include <QElapsedTimer>
 
 class RigidBody {
 public:
@@ -16,6 +17,7 @@ public:
     virtual void update(GLfloat delta_time) = 0;
     virtual void draw() = 0;
     glm::vec3 position;
+    QElapsedTimer timer;
 };
 
 

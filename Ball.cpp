@@ -8,7 +8,9 @@
 
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-Ball::Ball(float x, float y, float z, float radius) : RigidBody(glm::vec3(x, y, z)), radius(radius) {}
+Ball::Ball(float x, float y, float z, float radius) : RigidBody(glm::vec3(x, y, z)), radius(radius) {
+    timer.start();
+}
 
 void Ball::draw() {
     // create red ball
@@ -20,5 +22,5 @@ void Ball::draw() {
 }
 
 void Ball::update(GLfloat delta_time) {
-
+    position.y -= 9.8 * delta_time * (timer.elapsed()/1000.0f);
 }

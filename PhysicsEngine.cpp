@@ -18,7 +18,6 @@ void PhysicsEngine::draw() {
     }
 }
 
-
 void PhysicsEngine::addObject(const std::shared_ptr<RigidBody>& object) {
     objects.emplace_back(object);
 }
