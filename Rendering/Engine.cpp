@@ -10,7 +10,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-Engine::Engine(QWidget *parent) : QOpenGLWidget(parent), isDone(false), timer(this), camera() {}
+Engine::Engine(QWidget *parent) : QOpenGLWidget(parent), isDone(false), timer(this), camera(), physics() {}
 
 void Engine::initializeGL() {
     initializeOpenGLFunctions();
@@ -26,8 +26,13 @@ void Engine::initializeGL() {
     // set background colour to purple
     glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
 
+    /*
+     * Setup Physics Engine
+     */
+    physics.setGravity(glm::vec3(0, -9.8f, 0));
+
     Ball ball(0.0, 0, 0, 1);
-    PhysicsEngine::addObject(std::make_shared<Ball>(ball));
+    physics.addObject(std::make_shared<Ball>(ball));
 
     startLoop(); // start game loop
 }
@@ -43,10 +48,10 @@ void Engine::startLoop() {
 
 void Engine::loop() {
     // get time from previous frame
-    delta_time = elapsed_timer.elapsed() / 1000.0f;
+    GLfloat delta_time = elapsed_timer.elapsed() / 1000.0f;
     elapsed_timer.restart();
 
-    PhysicsEngine::update(delta_time);
+    physics.update(delta_time);
     camera.update();
 
     // call window/opengl to update
@@ -54,8 +59,6 @@ void Engine::loop() {
 }
 
 void Engine::resizeGL(int w, int h) {
-    screen_width = w;
-    screen_height = h;
 
     const float aspectRatio = (float) w / (float) h;
 
@@ -81,7 +84,7 @@ void Engine::paintGL() {
 
     glMultMatrixf(&camera.getView()[0][0]);
 
-    PhysicsEngine::draw();
+    physics.draw();
 
     // swap buffer
     glutSwapBuffers();

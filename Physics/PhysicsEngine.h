@@ -11,12 +11,15 @@
 
 class PhysicsEngine {
 public:
-    static void update(GLfloat delta_time);
-    static void draw();
+    PhysicsEngine() = default;
+    void update(GLfloat delta_time);
+    void draw();
 
-    static void addObject(const std::shared_ptr<RigidBody>& object);
+    void addObject(const std::shared_ptr<RigidBody>& object);
+    void setGravity(glm::vec3 g);
 protected:
-    static std::vector<std::shared_ptr<RigidBody>> objects;
+    std::vector<std::shared_ptr<RigidBody>> objects;
+    glm::vec3 gravity{0, 0, 0};
 };
 
 

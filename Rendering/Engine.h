@@ -18,6 +18,7 @@
 #include <QElapsedTimer>
 #include "../Objects/Ball.h"
 #include "Camera.h"
+#include "../Physics/PhysicsEngine.h"
 
 #else
 #include <GL/gl.h>
@@ -51,9 +52,10 @@ protected:
     bool isDone;
     QTimer timer;
     QElapsedTimer elapsed_timer;
-    GLfloat delta_time;
     Camera camera;
     QPoint last_m_pos;
+
+    PhysicsEngine physics;
 };
 
 
