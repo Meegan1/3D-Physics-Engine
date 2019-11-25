@@ -10,7 +10,7 @@ find_package(GLM REQUIRED)
 
 
 
-add_executable(Assignment_2 main.cpp RenderWindow.cpp RenderWindow.h Ball.cpp Ball.h Camera.cpp Camera.h PhysicsEngine.cpp PhysicsEngine.h RigidBody.h)
+add_executable(Assignment_2 main.cpp Rendering/Engine.cpp Rendering/Engine.h Objects/Ball.cpp Objects/Ball.h Rendering/Camera.cpp Rendering/Camera.h Physics/PhysicsEngine.cpp Physics/PhysicsEngine.h Objects/RigidBody.h)
 
 target_link_libraries(Assignment_2 Qt5::Widgets)
 

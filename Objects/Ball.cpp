@@ -23,5 +23,5 @@ void Ball::draw() {
 }
 
 void Ball::update(GLfloat delta_time) {
-    position.y -= 9.8 * delta_time * (timer.elapsed()/1000.0f);
+//    position.y -= 9.8 * delta_time * (timer.elapsed()/1000.0f);
 }

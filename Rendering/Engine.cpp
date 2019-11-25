@@ -3,15 +3,16 @@
 //
 
 #include <QPainter>
-#include "RenderWindow.h"
-#include "PhysicsEngine.h"
+#include "Engine.h"
+#include "../Physics/PhysicsEngine.h"
+#include <QMouseEvent>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-RenderWindow::RenderWindow(QWidget *parent) : QOpenGLWidget(parent), isDone(false), timer(this), camera() {}
+Engine::Engine(QWidget *parent) : QOpenGLWidget(parent), isDone(false), timer(this), camera() {}
 
-void RenderWindow::initializeGL() {
+void Engine::initializeGL() {
     initializeOpenGLFunctions();
 
     glEnable(GL_DEPTH_TEST); // enable z-buffering
@@ -31,28 +32,31 @@ void RenderWindow::initializeGL() {
     startLoop(); // start game loop
 }
 
-void RenderWindow::startLoop() {
+void Engine::startLoop() {
     // start elapsed timer
     elapsed_timer.start();
 
     // start game loop
-    connect(&timer, &QTimer::timeout, this, QOverload<>::of(&RenderWindow::loop));
+    connect(&timer, &QTimer::timeout, this, QOverload<>::of(&Engine::loop));
     timer.start();
 }
 
-void RenderWindow::loop() {
+void Engine::loop() {
     // get time from previous frame
     delta_time = elapsed_timer.elapsed() / 1000.0f;
     elapsed_timer.restart();
 
-//    PhysicsEngine::update(delta_time);
-    camera.update(delta_time);
+    PhysicsEngine::update(delta_time);
+    camera.update();
 
     // call window/opengl to update
     update();
 }
 
-void RenderWindow::resizeGL(int w, int h) {
+void Engine::resizeGL(int w, int h) {
+    screen_width = w;
+    screen_height = h;
+
     const float aspectRatio = (float) w / (float) h;
 
     // resize viewport to window size
@@ -64,7 +68,7 @@ void RenderWindow::resizeGL(int w, int h) {
     glFrustum(-aspectRatio, aspectRatio, -1.0, 1.0, 2.0, 100.0);
 }
 
-void RenderWindow::paintGL() {
+void Engine::paintGL() {
     // clear the buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -81,6 +85,37 @@ void RenderWindow::paintGL() {
 
     // swap buffer
     glutSwapBuffers();
+}
+
+void Engine::mouseMoveEvent(QMouseEvent *event) {
+    float sensitivity = 0.01;
+    if (event->buttons() & Qt::LeftButton) {
+        float xoffset = event->x() - last_m_pos.x();
+        float yoffset = event->y() - last_m_pos.y();
+
+        xoffset *= sensitivity;
+        yoffset *= sensitivity;
+
+        camera.rotate(xoffset, yoffset);
+    }
+    else if(event->buttons() &Qt::RightButton) {
+        float xoffset = last_m_pos.x() - event->x();
+        float yoffset = last_m_pos.y() - event->y();
+
+        xoffset *= sensitivity;
+        yoffset *= sensitivity;
+        camera.pan(xoffset, yoffset);
+    }
+
+    last_m_pos = event->pos();
+}
+
+void Engine::mousePressEvent(QMouseEvent *event) {
+    last_m_pos = event->pos();
+}
+
+void Engine::wheelEvent(QWheelEvent *event) {
+    camera.zoom(event->delta()*0.05f);
 }
 
 #pragma clang diagnostic pop
