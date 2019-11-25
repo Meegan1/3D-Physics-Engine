@@ -16,6 +16,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 #include "Ball.h"
+#include "Camera.h"
 
 #else
 #include <GL/gl.h>
@@ -41,6 +42,7 @@ protected:
     QTimer timer;
     QElapsedTimer elapsed_timer;
     GLfloat delta_time;
+    Camera camera;
 };
 
 

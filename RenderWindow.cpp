@@ -9,7 +9,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-RenderWindow::RenderWindow(QWidget *parent) : QOpenGLWidget(parent), isDone(false), timer(this) {}
+RenderWindow::RenderWindow(QWidget *parent) : QOpenGLWidget(parent), isDone(false), timer(this), camera() {}
 
 void RenderWindow::initializeGL() {
     initializeOpenGLFunctions();
@@ -25,7 +25,7 @@ void RenderWindow::initializeGL() {
     // set background colour to purple
     glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
 
-    Ball ball(0.0, 0, -6, 1);
+    Ball ball(0.0, 0, 0, 1);
     PhysicsEngine::addObject(std::make_shared<Ball>(ball));
 
     startLoop(); // start game loop
@@ -45,7 +45,8 @@ void RenderWindow::loop() {
     delta_time = elapsed_timer.elapsed() / 1000.0f;
     elapsed_timer.restart();
 
-    PhysicsEngine::update(delta_time);
+//    PhysicsEngine::update(delta_time);
+    camera.update(delta_time);
 
     // call window/opengl to update
     update();
@@ -73,6 +74,8 @@ void RenderWindow::paintGL() {
     // set model view matrix
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    glMultMatrixf(&camera.getView()[0][0]);
 
     PhysicsEngine::draw();
 

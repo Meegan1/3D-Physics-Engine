@@ -17,7 +17,8 @@ void Ball::draw() {
     glColor3f(1, 0, 0);
     glPushMatrix();
     glTranslated(position.x, position.y, position.z);
-    glutSolidSphere(radius,50,50);
+//    glutSolidSphere(radius,50,50);
+    glutSolidCube(1);
     glPopMatrix();
 }
 
