@@ -12,6 +12,7 @@
 class Camera {
 public:
     Camera();
+    explicit Camera(glm::vec3 position);
 
     void update();
 
@@ -21,8 +22,8 @@ public:
     glm::vec3 up();
     glm::quat orientation();
 
-    void pan(const float dx, const float dy);
-    void zoom(const float amount);
+    void pan(float dx, float dy);
+    void zoom(float amount);
     glm::mat4 getView();
     glm::mat4 view;
 protected:

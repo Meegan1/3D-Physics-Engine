@@ -5,12 +5,19 @@
 #include <QPainter>
 #include "Engine.h"
 #include "../Physics/PhysicsEngine.h"
+#include "../Objects/Plane.h"
 #include <QMouseEvent>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-Engine::Engine(QWidget *parent) : QOpenGLWidget(parent), isDone(false), timer(this), camera(), physics() {}
+Engine::Engine(QWidget *parent)
+        :
+        QOpenGLWidget(parent),
+        isDone(false),
+        timer(this),
+        camera(glm::vec3(0, 5.f, 7)),
+        physics() {}
 
 void Engine::initializeGL() {
     initializeOpenGLFunctions();
@@ -31,8 +38,11 @@ void Engine::initializeGL() {
      */
     physics.setGravity(glm::vec3(0, -9.8f, 0));
 
-    Ball ball(0.0, 0, 0, 1);
-    physics.addObject(std::make_shared<Ball>(ball));
+    Ball ball(0, 5, 0, 1);
+    physics.addRigidBody(std::make_shared<Ball>(ball));
+
+    Plane plane(glm::vec3(0, 0, 0), 10, 10);
+    physics.addObject(std::make_shared<Plane>(plane));
 
     startLoop(); // start game loop
 }
@@ -86,6 +96,9 @@ void Engine::paintGL() {
 
     physics.draw();
 
+    GLfloat lightPos[] = {0, 3.0f, 0, 0};
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+
     // swap buffer
     glutSwapBuffers();
 }
@@ -100,8 +113,7 @@ void Engine::mouseMoveEvent(QMouseEvent *event) {
         yoffset *= sensitivity;
 
         camera.rotate(xoffset, yoffset);
-    }
-    else if(event->buttons() &Qt::RightButton) {
+    } else if (event->buttons() & Qt::RightButton) {
         float xoffset = last_m_pos.x() - event->x();
         float yoffset = last_m_pos.y() - event->y();
 
@@ -118,7 +130,7 @@ void Engine::mousePressEvent(QMouseEvent *event) {
 }
 
 void Engine::wheelEvent(QWheelEvent *event) {
-    camera.zoom(event->delta()*0.05f);
+    camera.zoom(event->delta() * 0.05f);
 }
 
 #pragma clang diagnostic pop

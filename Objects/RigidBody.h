@@ -9,18 +9,16 @@
 #include <gltypes.h>
 #include <glm/glm.hpp>
 #include <QElapsedTimer>
+#include "Object.h"
 
-class RigidBody {
+class RigidBody : public Object {
 public:
-    explicit RigidBody(glm::vec3 position) : position(position), gravity(0, 0, 0) {};
-
-    virtual void update(GLfloat delta_time) = 0;
-    virtual void draw() = 0;
+    explicit RigidBody(glm::vec3 position) : Object(position), gravity(0, 0, 0) {};
 
     void setGravity(glm::vec3 g) {
         gravity = g;
     }
-    glm::vec3 position, gravity;
+    glm::vec3 gravity;
     QElapsedTimer timer;
 };
 

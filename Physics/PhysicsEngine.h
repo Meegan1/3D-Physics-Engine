@@ -15,10 +15,12 @@ public:
     void update(GLfloat delta_time);
     void draw();
 
-    void addObject(const std::shared_ptr<RigidBody>& object);
+    void addObject(const std::shared_ptr<Object>& object);
+    void addRigidBody(const std::shared_ptr<RigidBody>& rigidBody);
     void setGravity(glm::vec3 g);
 protected:
-    std::vector<std::shared_ptr<RigidBody>> objects;
+    std::vector<std::shared_ptr<Object>> objects;
+    std::vector<std::shared_ptr<RigidBody>> rigidBodies;
     glm::vec3 gravity{0, 0, 0};
 };
 
