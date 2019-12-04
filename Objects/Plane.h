@@ -12,7 +12,7 @@ class Plane : public Object {
 public:
     explicit Plane(glm::vec3 position, int height, int width);
 
-    void update(GLfloat delta_time) override;
+    void update(const GLfloat &delta_time) override;
 
     void draw() override;
 

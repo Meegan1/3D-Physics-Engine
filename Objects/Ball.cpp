@@ -8,8 +8,8 @@
 
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-Ball::Ball(float x, float y, float z, float radius) : RigidBody(glm::vec3(x, y, z)), radius(radius) {
-    timer.start();
+Ball::Ball(float x, float y, float z, float radius) : RigidBody(glm::vec3(x, y, z), 0.5), radius(radius) {
+    RESTITUTION_COEFFICIENT = 0.8;
 }
 
 void Ball::draw() {
@@ -21,6 +21,13 @@ void Ball::draw() {
     glPopMatrix();
 }
 
-void Ball::update(GLfloat delta_time) {
-    position += gravity * delta_time * (timer.elapsed()/1000.0f);
+void Ball::update(const GLfloat &delta_time) {
+    if(position.y <= 1) {
+        velocity = (-velocity * getRF());
+        velocityStasisCheck();
+        position.y = 1;
+    }
+
+    updateVelocity(delta_time);
+    position += getVelocity() * delta_time;
 }

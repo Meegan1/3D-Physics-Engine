@@ -24,7 +24,7 @@ void Plane::draw() {
     glPopMatrix();
 }
 
-void Plane::update(GLfloat delta_time) {
+void Plane::update(const GLfloat &delta_time) {
 
 }
 
