@@ -54,7 +54,7 @@ public:
         }
     }
 
-    GLfloat getRF() {
+    GLfloat getRC() {
         return RESTITUTION_COEFFICIENT;
     }
 

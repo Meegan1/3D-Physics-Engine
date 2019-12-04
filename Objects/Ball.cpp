@@ -23,7 +23,7 @@ void Ball::draw() {
 
 void Ball::update(const GLfloat &delta_time) {
     if(position.y <= 1) {
-        velocity = (-velocity * getRF());
+        velocity = (-velocity * getRC());
         velocityStasisCheck();
         position.y = 1;
     }
