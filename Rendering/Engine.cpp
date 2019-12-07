@@ -7,6 +7,8 @@
 #include "../Physics/PhysicsEngine.h"
 #include "../Objects/Plane.h"
 #include <QMouseEvent>
+#include <chrono>
+#include <thread>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -76,16 +78,20 @@ void Engine::startLoop() {
 
 void Engine::loop() {
     // get time from previous frame
-    GLfloat delta_time = elapsed_timer.elapsed() / 1000.0f;
+    GLfloat delta_time = elapsed_timer.nsecsElapsed() * 0.000000001;
     elapsed_timer.restart();
+
+    camera.update();
 
     if(!is_paused)
         physics.update(delta_time);
 
-    camera.update();
-
     // call window/opengl to update
     update();
+
+    timer.stop();
+    timer.start((1000 / 60) - (int) elapsed_timer.elapsed());
+    qDebug() << 1/delta_time;
 }
 
 void Engine::resizeGL(int w, int h) {
