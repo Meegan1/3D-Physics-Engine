@@ -16,6 +16,7 @@
 #include <QtDebug>
 #include <QTimer>
 #include <QElapsedTimer>
+#include <QPushButton>
 #include "../Objects/Ball.h"
 #include "Camera.h"
 #include "../Physics/PhysicsEngine.h"
@@ -27,8 +28,17 @@
 #endif
 
 class Engine : public QOpenGLWidget, protected QOpenGLFunctions {
+Q_OBJECT
 public:
     explicit Engine(QWidget *parent);
+
+    void pause();
+
+    void play();
+
+public slots:
+    void togglePause();
+    void restart();
 protected:
     void initializeGL() override;
 
@@ -49,13 +59,20 @@ protected:
 
     void wheelEvent(QWheelEvent *event) override;
 
-    bool isDone;
+    bool is_done;
+    bool is_paused;
     QTimer timer;
     QElapsedTimer elapsed_timer;
     Camera camera;
     QPoint last_m_pos;
 
     PhysicsEngine physics;
+
+private:
+    void initializeHUD();
+
+    QPushButton *btn_play;
+    QPushButton *btn_restart;
 };
 
 

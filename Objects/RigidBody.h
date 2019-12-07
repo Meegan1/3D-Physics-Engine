@@ -13,7 +13,15 @@
 
 class RigidBody : public Object {
 public:
-    explicit RigidBody(glm::vec3 position, float mass) : Object(position), mass(mass) {};
+    explicit RigidBody(glm::vec3 position, float mass, float restitution_coefficient) : Object(position), mass(mass),
+                                                                                        RESTITUTION_COEFFICIENT(restitution_coefficient),
+                                                                                        o_position(position) {};
+
+    void reset() {
+        position = o_position;
+        force = glm::vec3(0);
+        velocity = glm::vec3(0);
+    }
 
     void setGravity(const glm::vec3 &g) {
         gravity = g;
@@ -35,23 +43,10 @@ public:
 
     void updateVelocity(const GLfloat &delta_time) {
         velocity += (acceleration + gravity) * delta_time;
-        velocityStasisCheck();
     }
 
     glm::vec3 getVelocity() {
         return velocity;
-    }
-
-    void velocityStasisCheck() {
-        if(velocity.x <= V_EPSILON && velocity.x >= V_EPSILON) {
-            velocity.x = 0;
-        }
-        if(velocity.y <= V_EPSILON && velocity.y >= V_EPSILON) {
-            velocity.y = 0;
-        }
-        if(velocity.z <= V_EPSILON && velocity.z >= V_EPSILON) {
-            velocity.z = 0;
-        }
     }
 
     GLfloat getRC() {
@@ -60,12 +55,12 @@ public:
 
 protected:
     float mass;
+    glm::vec3 o_position{0, 0, 0}; // original position
     glm::vec3 force{0, 0, 0};
     glm::vec3 gravity{0, 0, 0};
     glm::vec3 acceleration{0, 0, 0};
     glm::vec3 velocity{0, 0, 0};
 
-    GLfloat V_EPSILON = 0.01f;
     GLfloat RESTITUTION_COEFFICIENT = 1;
 };
 

@@ -14,6 +14,7 @@ public:
     PhysicsEngine() = default;
     void update(GLfloat delta_time);
     void draw();
+    void reset();
 
     void addObject(const std::shared_ptr<Object>& object);
     void addRigidBody(const std::shared_ptr<RigidBody>& rigidBody);

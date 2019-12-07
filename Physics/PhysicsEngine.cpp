@@ -24,6 +24,13 @@ void PhysicsEngine::draw() {
     }
 }
 
+
+void PhysicsEngine::reset() {
+    for(const auto& body : rigidBodies) {
+        body->reset();
+    }
+}
+
 void PhysicsEngine::addObject(const std::shared_ptr<Object>& object) {
     objects.emplace_back(object);
 }

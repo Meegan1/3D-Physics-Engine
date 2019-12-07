@@ -10,7 +10,7 @@
 
 class Ball : public RigidBody {
 public:
-    explicit Ball(float x, float y, float z, float radius);
+    explicit Ball(float x, float y, float z, float radius, float restitution_coefficient);
     void draw() override;
     void update(const GLfloat &delta_time) override;
 
