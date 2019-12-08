@@ -17,6 +17,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 #include <QPushButton>
+#include <QSpinBox>
 #include "../Objects/Ball.h"
 #include "Camera.h"
 #include "../Physics/PhysicsEngine.h"
@@ -39,6 +40,7 @@ public:
 public slots:
     void togglePause();
     void restart();
+    void setFPS(int fps);
 protected:
     void initializeGL() override;
 
@@ -61,6 +63,7 @@ protected:
 
     bool is_done;
     bool is_paused;
+    unsigned int FPS;
     QTimer timer;
     QElapsedTimer elapsed_timer;
     Camera camera;
@@ -73,6 +76,7 @@ private:
 
     QPushButton *btn_play;
     QPushButton *btn_restart;
+    QSpinBox *btn_fps;
 };
 
 

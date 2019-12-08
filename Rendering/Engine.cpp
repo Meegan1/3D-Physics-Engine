@@ -7,8 +7,6 @@
 #include "../Physics/PhysicsEngine.h"
 #include "../Objects/Plane.h"
 #include <QMouseEvent>
-#include <chrono>
-#include <thread>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -18,6 +16,7 @@ Engine::Engine(QWidget *parent)
         QOpenGLWidget(parent),
         is_done(false),
         is_paused(false),
+        FPS(0),
         timer(this),
         camera(glm::vec3(0, 5.f, 7)),
         physics() {}
@@ -62,9 +61,17 @@ void Engine::initializeHUD() {
     btn_restart->setGeometry(QRect(QPoint(100, 0),
                                 QSize(100, 50)));
 
+    // setup FPS Control
+    btn_fps = new QSpinBox(this);
+    btn_fps->setGeometry(QRect(QPoint(200, 0),
+                                QSize(100, 25)));
+    btn_fps->setSuffix(" fps");
+
+
     // connect buttons to slots
     connect(btn_play, SIGNAL (released()), this, SLOT (togglePause()));
     connect(btn_restart, SIGNAL (released()), this, SLOT (restart()));
+    connect(btn_fps, SIGNAL (valueChanged(int)), this, SLOT (setFPS(int)));
 }
 
 void Engine::startLoop() {
@@ -89,9 +96,10 @@ void Engine::loop() {
     // call window/opengl to update
     update();
 
-    timer.stop();
-    timer.start((1000 / 60) - (int) elapsed_timer.elapsed());
-    qDebug() << 1/delta_time;
+    if(FPS != 0) {
+        timer.stop();
+        timer.start((1000 / (int) FPS) - (int) elapsed_timer.elapsed());
+    }
 }
 
 void Engine::resizeGL(int w, int h) {
@@ -179,6 +187,10 @@ void Engine::togglePause() {
 
 void Engine::restart() {
     physics.reset();
+}
+
+void Engine::setFPS(int fps) {
+    FPS = fps;
 }
 
 #pragma clang diagnostic pop
