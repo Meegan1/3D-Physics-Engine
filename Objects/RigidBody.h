@@ -41,6 +41,10 @@ public:
         return force;
     }
 
+    void setVelocity(const glm::vec3 &v) {
+        velocity = v;
+    }
+
     void updateVelocity(const GLfloat &delta_time) {
         velocity += (acceleration + gravity) * delta_time;
     }

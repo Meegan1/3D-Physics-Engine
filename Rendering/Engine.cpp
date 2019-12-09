@@ -6,6 +6,7 @@
 #include "Engine.h"
 #include "../Physics/PhysicsEngine.h"
 #include "../Objects/Plane.h"
+#include "ObjectDialog.h"
 #include <QMouseEvent>
 
 #pragma clang diagnostic push
@@ -67,11 +68,16 @@ void Engine::initializeHUD() {
                                 QSize(100, 25)));
     btn_fps->setSuffix(" fps");
 
+    // setup add object button
+    btn_add_object = new QPushButton("Add Object", this);
+    btn_add_object->setGeometry(QRect(QPoint(300, 0),
+                                   QSize(100, 50)));
 
     // connect buttons to slots
     connect(btn_play, SIGNAL (released()), this, SLOT (togglePause()));
     connect(btn_restart, SIGNAL (released()), this, SLOT (restart()));
     connect(btn_fps, SIGNAL (valueChanged(int)), this, SLOT (setFPS(int)));
+    connect(btn_add_object, SIGNAL (released()), this, SLOT (addObjectDialog()));
 }
 
 void Engine::startLoop() {
@@ -191,6 +197,13 @@ void Engine::restart() {
 
 void Engine::setFPS(int fps) {
     FPS = fps;
+}
+
+void Engine::addObjectDialog() {
+    bool ok;
+    std::shared_ptr<Ball> ball = std::make_shared<Ball>(ObjectDialog::getBall(this, &ok));
+    if(ok)
+        physics.addRigidBody(ball);
 }
 
 #pragma clang diagnostic pop

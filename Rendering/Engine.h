@@ -41,6 +41,7 @@ public slots:
     void togglePause();
     void restart();
     void setFPS(int fps);
+    void addObjectDialog();
 protected:
     void initializeGL() override;
 
@@ -77,6 +78,7 @@ private:
     QPushButton *btn_play;
     QPushButton *btn_restart;
     QSpinBox *btn_fps;
+    QPushButton *btn_add_object;
 };
 
 
