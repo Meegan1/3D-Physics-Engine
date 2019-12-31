@@ -21,6 +21,7 @@
 #include "../Objects/Ball.h"
 #include "Camera.h"
 #include "../Physics/PhysicsEngine.h"
+#include "QFPS.h"
 
 #else
 #include <GL/gl.h>
@@ -42,6 +43,7 @@ public slots:
     void restart();
     void setFPS(int fps);
     void addObjectDialog();
+
 protected:
     void initializeGL() override;
 
@@ -77,8 +79,11 @@ private:
 
     QPushButton *btn_play;
     QPushButton *btn_restart;
-    QSpinBox *btn_fps;
     QPushButton *btn_add_object;
+    QSpinBox *btn_fps;
+    QFPS *fps_label;
+
+    void updateFPS(GLfloat time);
 };
 
 

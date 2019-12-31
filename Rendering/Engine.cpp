@@ -62,22 +62,26 @@ void Engine::initializeHUD() {
     btn_restart->setGeometry(QRect(QPoint(100, 0),
                                 QSize(100, 50)));
 
-    // setup FPS Control
-    btn_fps = new QSpinBox(this);
-    btn_fps->setGeometry(QRect(QPoint(200, 0),
-                                QSize(100, 25)));
-    btn_fps->setSuffix(" fps");
-
     // setup add object button
     btn_add_object = new QPushButton("Add Object", this);
-    btn_add_object->setGeometry(QRect(QPoint(300, 0),
+    btn_add_object->setGeometry(QRect(QPoint(200, 0),
                                    QSize(100, 50)));
+
+    // setup FPS Control
+    btn_fps = new QSpinBox(this);
+    btn_fps->setGeometry(QRect(QPoint(300, 12),
+                               QSize(100, 25)));
+    btn_fps->setSuffix(" fps");
+
+    fps_label = new QFPS(this);
+    fps_label->setGeometry(QRect(QPoint(400, 0),
+                                 QSize(100, 50)));
 
     // connect buttons to slots
     connect(btn_play, SIGNAL (released()), this, SLOT (togglePause()));
     connect(btn_restart, SIGNAL (released()), this, SLOT (restart()));
-    connect(btn_fps, SIGNAL (valueChanged(int)), this, SLOT (setFPS(int)));
     connect(btn_add_object, SIGNAL (released()), this, SLOT (addObjectDialog()));
+    connect(btn_fps, SIGNAL (valueChanged(int)), this, SLOT (setFPS(int)));
 }
 
 void Engine::startLoop() {
@@ -106,6 +110,8 @@ void Engine::loop() {
         timer.stop();
         timer.start((1000 / (int) FPS) - (int) elapsed_timer.elapsed());
     }
+
+    updateFPS(delta_time);
 }
 
 void Engine::resizeGL(int w, int h) {
@@ -197,6 +203,12 @@ void Engine::restart() {
 
 void Engine::setFPS(int fps) {
     FPS = fps;
+
+    // uncap fps when set to 0
+    if(fps == 0) {
+        timer.stop();
+        timer.start(0);
+    }
 }
 
 void Engine::addObjectDialog() {
@@ -204,6 +216,11 @@ void Engine::addObjectDialog() {
     std::shared_ptr<Ball> ball = std::make_shared<Ball>(ObjectDialog::getBall(this, &ok));
     if(ok)
         physics.addRigidBody(ball);
+}
+
+void Engine::updateFPS(GLfloat time) {
+    int FPS = 1/time;
+    fps_label->updateFPS(FPS);
 }
 
 #pragma clang diagnostic pop
