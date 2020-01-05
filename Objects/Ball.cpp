@@ -21,11 +21,13 @@ void Ball::draw() {
 }
 
 void Ball::update(const GLfloat &delta_time) {
-    if(position.y <= 1) {
-        velocity.y = (-velocity.y * getRC());
-        position.y = 1;
-    }
-
     updateVelocity(delta_time);
     position += getVelocity() * delta_time;
+}
+
+void Ball::collision(const glm::vec3 &intersection) {
+    if(position.y <= intersection.y + radius) {
+        velocity.y = (-velocity.y * getRC());
+        position.y = intersection.y + radius;
+    }
 }

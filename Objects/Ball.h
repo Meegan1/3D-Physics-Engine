@@ -14,6 +14,8 @@ public:
     void draw() override;
     void update(const GLfloat &delta_time) override;
 
+    void collision(const glm::vec3 &intersection) override;
+
     float radius;
 };
 

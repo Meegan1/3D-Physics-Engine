@@ -57,7 +57,8 @@ public:
         return RESTITUTION_COEFFICIENT;
     }
 
-protected:
+    virtual void collision(const glm::vec3 &intersection) = 0;
+
     float mass;
     glm::vec3 o_position{0, 0, 0}; // original position
     glm::vec3 force{0, 0, 0};

@@ -11,6 +11,10 @@ void PhysicsEngine::update(GLfloat delta_time) {
 
     for(const auto& body : rigidBodies) {
         body->update(delta_time);
+
+        for(const auto& object : objects) {
+            body->collision(glm::vec3(0, object->position.y, 0));
+        }
     }
 }
 
