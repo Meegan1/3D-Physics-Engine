@@ -20,7 +20,8 @@ Engine::Engine(QWidget *parent)
         FPS(0),
         timer(this),
         camera(glm::vec3(0, 5.f, 7)),
-        physics() {}
+        physics(),
+        delta_accumulator(0) {}
 
 void Engine::initializeGL() {
     initializeOpenGLFunctions();
@@ -95,13 +96,27 @@ void Engine::startLoop() {
 
 void Engine::loop() {
     // get time from previous frame
-    GLfloat delta_time = elapsed_timer.nsecsElapsed() * 0.000000001;
+    GLfloat frame_time = elapsed_timer.nsecsElapsed() * 0.000000001;
     elapsed_timer.restart();
+    delta_accumulator += frame_time;
 
     camera.update();
 
-    if(!is_paused)
-        physics.update(delta_time);
+    // integrate in steps
+    while (delta_accumulator >= DELTA_TIME) {
+        if (!is_paused)
+            physics.update(DELTA_TIME);
+
+        delta_accumulator -= DELTA_TIME;
+    }
+
+    // catch remainder in accumulator and integrate
+    if(delta_accumulator >= 0.0f) {
+        if (!is_paused)
+            physics.update(delta_accumulator);
+
+        delta_accumulator = 0.0f;
+    }
 
     // call window/opengl to update
     update();
@@ -111,7 +126,7 @@ void Engine::loop() {
         timer.start((1000 / (int) FPS) - (int) elapsed_timer.elapsed());
     }
 
-    updateFPS(delta_time);
+    updateFPS(frame_time);
 }
 
 void Engine::resizeGL(int w, int h) {

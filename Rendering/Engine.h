@@ -29,6 +29,8 @@
 #include <GL/glut.h>
 #endif
 
+#define DELTA_TIME 0.01f
+
 class Engine : public QOpenGLWidget, protected QOpenGLFunctions {
 Q_OBJECT
 public:
@@ -69,6 +71,7 @@ protected:
     unsigned int FPS;
     QTimer timer;
     QElapsedTimer elapsed_timer;
+    GLfloat delta_accumulator;
     Camera camera;
     QPoint last_m_pos;
 
