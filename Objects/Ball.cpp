@@ -5,10 +5,13 @@
 #include <gl.h>
 #include <GLUT/glut.h>
 #include "Ball.h"
+#include "../Physics/Sphere.h"
 
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-Ball::Ball(float x, float y, float z, float radius, float restitution_coefficient) : RigidBody(glm::vec3(x, y, z), 0.5, restitution_coefficient), radius(radius) {
+Ball::Ball(const glm::vec3 &position, float radius, float restitution_coefficient) : Object(position), radius(radius) {
+    Sphere sphere(position, 0.5, 0.6, 1);
+    rigidBody = std::make_shared<Sphere>(sphere);
 }
 
 void Ball::draw() {
@@ -21,13 +24,14 @@ void Ball::draw() {
 }
 
 void Ball::update(const GLfloat &delta_time) {
-    updateVelocity(delta_time);
-    position += getVelocity() * delta_time;
+    if(rigidBody == nullptr)
+        return;
+
+    rigidBody->updateVelocity(delta_time);
+    position += rigidBody->getVelocity() * delta_time;
 }
 
-void Ball::collision(const glm::vec3 &intersection) {
-    if(position.y <= intersection.y + radius) {
-        velocity.y = (-velocity.y * getRC());
-        position.y = intersection.y + radius;
-    }
+void Ball::reset() {
+    rigidBody->reset();
+    position = rigidBody->o_position;
 }

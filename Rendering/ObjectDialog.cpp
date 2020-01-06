@@ -49,8 +49,8 @@ Ball ObjectDialog::getBall(QWidget *parent, bool *ok) {
     const int ret = dialog->exec();
     *ok = (ret != 0);
 
-    Ball ball(dialog->p_x.value(), dialog->p_y.value(), dialog->p_z.value(), dialog->radius.value(), dialog->restitution.value());
-    ball.setVelocity(glm::vec3(dialog->v_x.value(), dialog->v_y.value(), dialog->v_z.value()));
+    Ball ball(glm::vec3(dialog->p_x.value(), dialog->p_y.value(), dialog->p_z.value()), dialog->radius.value(), dialog->restitution.value());
+    ball.rigidBody->setVelocity(glm::vec3(dialog->v_x.value(), dialog->v_y.value(), dialog->v_z.value()));
 
     return ball;
 }

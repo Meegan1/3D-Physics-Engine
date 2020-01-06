@@ -9,16 +9,14 @@
 #include <gltypes.h>
 #include <glm/glm.hpp>
 #include <QElapsedTimer>
-#include "Object.h"
 
-class RigidBody : public Object {
+class RigidBody {
 public:
-    explicit RigidBody(glm::vec3 position, float mass, float restitution_coefficient) : Object(position), mass(mass),
+    explicit RigidBody(glm::vec3 &position, float mass, float restitution_coefficient) : mass(mass),
                                                                                         RESTITUTION_COEFFICIENT(restitution_coefficient),
                                                                                         o_position(position) {};
 
     void reset() {
-        position = o_position;
         force = glm::vec3(0);
         velocity = glm::vec3(0);
     }
@@ -57,12 +55,12 @@ public:
         return RESTITUTION_COEFFICIENT;
     }
 
-    virtual void collision(const glm::vec3 &intersection) = 0;
+    virtual void collision(glm::vec3 &position, const glm::vec3 &intersection) {};
 
     float mass;
     glm::vec3 o_position{0, 0, 0}; // original position
     glm::vec3 force{0, 0, 0};
-    glm::vec3 gravity{0, 0, 0};
+    glm::vec3 gravity{0, -9.8, 0};
     glm::vec3 acceleration{0, 0, 0};
     glm::vec3 velocity{0, 0, 0};
 

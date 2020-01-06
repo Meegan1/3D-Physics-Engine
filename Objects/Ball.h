@@ -6,15 +6,14 @@
 #define ASSIGNMENT_2_BALL_H
 
 
-#include "RigidBody.h"
+#include "Object.h"
 
-class Ball : public RigidBody {
+class Ball : public Object {
 public:
-    explicit Ball(float x, float y, float z, float radius, float restitution_coefficient);
+    explicit Ball(const glm::vec3 &position, float radius, float restitution_coefficient);
     void draw() override;
     void update(const GLfloat &delta_time) override;
-
-    void collision(const glm::vec3 &intersection) override;
+    void reset();
 
     float radius;
 };

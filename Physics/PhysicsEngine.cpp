@@ -7,13 +7,14 @@
 void PhysicsEngine::update(GLfloat delta_time) {
     for(const auto& object : objects) {
         object->update(delta_time);
-    }
 
-    for(const auto& body : rigidBodies) {
-        body->update(delta_time);
+        if(object->rigidBody != nullptr) {
+            for (const auto &other : objects) {
+                if(object == other)
+                    continue;
 
-        for(const auto& object : objects) {
-            body->collision(glm::vec3(0, object->position.y, 0));
+                object->rigidBody->collision(object->position, glm::vec3(0, other->position.y, 0));
+            }
         }
     }
 }
@@ -22,16 +23,12 @@ void PhysicsEngine::draw() {
     for(const auto& object : objects) {
         object->draw();
     }
-
-    for(const auto& body : rigidBodies) {
-        body->draw();
-    }
 }
 
 
 void PhysicsEngine::reset() {
-    for(const auto& body : rigidBodies) {
-        body->reset();
+    for(const auto& object : objects) {
+        object->reset();
     }
 }
 
@@ -39,15 +36,10 @@ void PhysicsEngine::addObject(const std::shared_ptr<Object>& object) {
     objects.emplace_back(object);
 }
 
-void PhysicsEngine::addRigidBody(const std::shared_ptr<RigidBody>& rigidBody) {
-    rigidBody->setGravity(gravity);
-    rigidBodies.emplace_back(rigidBody);
-}
-
 void PhysicsEngine::setGravity(glm::vec3 g) {
     gravity = g;
 
-    for(auto &body : rigidBodies) {
-        body->setGravity(g);
+    for(const auto& object : objects) {
+        object->rigidBody->setGravity(g);
     }
 }

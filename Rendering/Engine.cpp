@@ -43,8 +43,8 @@ void Engine::initializeGL() {
      */
     physics.setGravity(glm::vec3(0, -9.8f, 0));
 
-    Ball ball(0, 10, 0, 1, 0.6);
-    physics.addRigidBody(std::make_shared<Ball>(ball));
+    Ball ball(glm::vec3(0, 10, 0), 1, 0.6);
+    physics.addObject(std::make_shared<Ball>(ball));
 
     Plane plane(glm::vec3(0, 0, 0), 10, 10);
     physics.addObject(std::make_shared<Plane>(plane));
@@ -230,7 +230,7 @@ void Engine::addObjectDialog() {
     bool ok;
     std::shared_ptr<Ball> ball = std::make_shared<Ball>(ObjectDialog::getBall(this, &ok));
     if(ok)
-        physics.addRigidBody(ball);
+        physics.addObject(ball);
 }
 
 void Engine::updateFPS(GLfloat time) {
