@@ -104,7 +104,13 @@ public:
 
                     float j = glm::max(-(1 + curr_object->rigidBody->getRC()) * d, 0.0f);
 
-                    curr_object->rigidBody->velocity += j * collision.normal;
+                    velocity += j * collision.normal;
+
+                    // apply friction
+                        glm::vec3 friction = velocity - glm::dot(velocity, collision.normal) * collision.normal;
+                        glm::vec3 direction = glm::normalize(friction);
+                        if(!glm::all(glm::isnan(direction)))
+                            velocity -= direction * 0.005f;
 
                     curr_object->position = collision.point + (collision.offset * -collision.direction);
                 }
