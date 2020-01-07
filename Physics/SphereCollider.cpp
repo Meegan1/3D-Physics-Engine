@@ -4,28 +4,23 @@
 
 #include "SphereCollider.h"
 
-//bool SphereCollider::collides(const Plane &plane) {
-//    if(position.y <= plane.position.y + radius)
-//        return true;
-
-//}
-
-
 Collision SphereCollider::collides(Collider &other) {
     return other.collides(*this);
 }
 
-
 Collision SphereCollider::collides(SphereCollider &other) {
+    glm::vec3 point = closestPoint(other.position);
+    GLfloat distance = Collider::distance(other, point);
+
+    glm::vec3 direction = glm::normalize(other.closestPoint(point) - other.position);
+
+    return {distance < other.radius, other.radius, direction, point, glm::normalize(point - position)};
+}
+
+Collision SphereCollider::collides(PlaneCollider &other) {
     return false;
 }
 
-
-Collision SphereCollider::collides(PlaneCollider &other) {
-    GLfloat distance = Collider::distance(*this, other.position);
-    return distance < radius;
-}
-
 glm::vec3 SphereCollider::closestPoint(const glm::vec3 &point) {
-    return glm::normalize(point - position) * radius;
+    return (glm::normalize(point - position) * radius) + position;
 }

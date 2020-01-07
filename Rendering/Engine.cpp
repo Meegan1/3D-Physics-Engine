@@ -43,8 +43,21 @@ void Engine::initializeGL() {
      */
     physics.setGravity(glm::vec3(0, -9.8f, 0));
 
-    Ball ball(glm::vec3(0, 10, 0), 1, 0.6);
-    physics.addObject(std::make_shared<Ball>(ball));
+    // ball falling off side of plane
+    Ball falling_ball(glm::vec3(-5.1, 1, 0), 1, 0.6);
+    physics.addObject(std::make_shared<Ball>(falling_ball));
+
+    /*
+     * Balls colliding into eachother
+     */
+    Ball colliing_ball_1(glm::vec3(0.5, 10, 0), 1, 0.6);
+    physics.addObject(std::make_shared<Ball>(colliing_ball_1));
+
+    Ball colliing_ball_2(glm::vec3(0, 5, 0), 1, 0.6);
+    physics.addObject(std::make_shared<Ball>(colliing_ball_2));
+
+    Ball colliing_ball_3(glm::vec3(-3, 7, 0), 1, 0.6);
+    physics.addObject(std::make_shared<Ball>(colliing_ball_3));
 
     Plane plane(glm::vec3(-5, 0, -5), 10, 10);
     physics.addObject(std::make_shared<Plane>(plane));

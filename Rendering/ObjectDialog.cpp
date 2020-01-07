@@ -15,6 +15,9 @@ ObjectDialog::ObjectDialog(QWidget *parent) : p_x(), p_y(), p_z(), v_x(), v_y(),
     position->addWidget(&p_x);
     position->addWidget(&p_y);
     position->addWidget(&p_z);
+    p_x.setRange(-100, 100);
+    p_y.setRange(-100, 100);
+    p_z.setRange(-100, 100);
     layout->addRow(pLabel, position);
 
     QLabel *vLabel = new QLabel("Velocity:");
@@ -22,6 +25,9 @@ ObjectDialog::ObjectDialog(QWidget *parent) : p_x(), p_y(), p_z(), v_x(), v_y(),
     velocity->addWidget(&v_x);
     velocity->addWidget(&v_y);
     velocity->addWidget(&v_z);
+    v_x.setRange(-100, 100);
+    v_y.setRange(-100, 100);
+    v_z.setRange(-100, 100);
     layout->addRow(vLabel, velocity);
 
     QLabel *rLabel = new QLabel("Radius:");

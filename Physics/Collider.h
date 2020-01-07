@@ -13,12 +13,11 @@ struct Collision {
     GLfloat offset;
     glm::vec3 direction;
     glm::vec3 point;
+    glm::vec3 normal;
 
     Collision(GLboolean hasCollided) : hasCollided(hasCollided), offset(0) {}
-    Collision(GLboolean hasCollided, GLfloat offset) : hasCollided(hasCollided), offset(offset) {}
-
-    Collision(GLboolean hasCollided, GLfloat offset, const glm::vec3 &direction, const glm::vec3 &point) : hasCollided(
-            hasCollided), offset(offset), direction(direction), point(point) {}
+    Collision(GLboolean hasCollided, GLfloat offset, const glm::vec3 &direction, const glm::vec3 &point, const glm::vec3 &normal) : hasCollided(
+            hasCollided), offset(offset), direction(direction), point(point), normal(normal) {}
 };
 
 class SphereCollider;

@@ -13,9 +13,9 @@ Collision PlaneCollider::collides(SphereCollider &other) {
     glm::vec3 point = closestPoint(other.position);
     GLfloat distance = Collider::distance(other, point);
 
-    glm::vec3 direction = glm::normalize(other.closestPoint(point));
+    glm::vec3 direction = glm::normalize(other.closestPoint(point) - other.position);
 
-    return {distance < other.radius, other.radius, direction, point};
+    return {distance < other.radius, other.radius, direction, point, glm::normalize(other.position - point)};
 }
 
 Collision PlaneCollider::collides(PlaneCollider &other) {

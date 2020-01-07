@@ -73,8 +73,11 @@ public:
 
             Collision collision = curr_object->collider->collides(*object->collider);
             if(collision.hasCollided) {
-                velocity.y = (-velocity.y * getRC());
                 curr_object->position = collision.point + (collision.offset * -collision.direction);
+
+                float d = glm::dot(velocity, collision.normal);
+                float j = glm::max(-(1 + getRC()) * d, 0.0f);
+                velocity += j * collision.normal;
             }
         }
     };
