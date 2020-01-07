@@ -60,7 +60,20 @@ public:
         return RESTITUTION_COEFFICIENT;
     }
 
-    void collision(std::shared_ptr<Object> curr_object, const std::vector<std::shared_ptr<Object>> &objects) {
+    static void resolveCollision(const std::shared_ptr<Object> &object, const std::shared_ptr<Object> &other) {
+        Collision collision = object->collider->collides(*other->collider);
+        if(collision.hasCollided) {
+            float d = glm::dot(object->rigidBody->velocity, collision.normal);
+
+            float j = glm::max(-(1 + object->rigidBody->getRC()) * d, 0.0f);
+
+            object->rigidBody->velocity += j * collision.normal;
+
+            object->position = collision.point + (collision.offset * -collision.direction);
+        }
+    }
+
+    void collision(const std::shared_ptr<Object> &curr_object, const std::vector<std::shared_ptr<Object>> &objects) {
         for(const auto& object : objects) {
             if(curr_object == object) // ignore if same object
                 continue;
@@ -70,15 +83,7 @@ public:
 
             curr_object->updateCollider();
             object->updateCollider();
-
-            Collision collision = curr_object->collider->collides(*object->collider);
-            if(collision.hasCollided) {
-                curr_object->position = collision.point + (collision.offset * -collision.direction);
-
-                float d = glm::dot(velocity, collision.normal);
-                float j = glm::max(-(1 + getRC()) * d, 0.0f);
-                velocity += j * collision.normal;
-            }
+            resolveCollision(curr_object, object);
         }
     };
 

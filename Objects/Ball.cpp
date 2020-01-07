@@ -10,7 +10,7 @@
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 Ball::Ball(const glm::vec3 &position, float radius, float restitution_coefficient) : Object(position), radius(radius) {
-    rigidBody = std::make_shared<RigidBody>(RigidBody(position, 0.5, 0.6));
+    rigidBody = std::make_shared<RigidBody>(RigidBody(position, 0.5, restitution_coefficient));
     collider = new SphereCollider(this->position, radius);
 }
 
