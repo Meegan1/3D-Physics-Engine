@@ -50,16 +50,26 @@ void Engine::initializeGL() {
     /*
      * Balls colliding into eachother
      */
-    Ball colliding_ball_1(glm::vec3(0, 10, 0), 1, 0.6);
+//    Ball colliding_ball_1(glm::vec3(0, 10, 0), 1, 0.5);
+//    physics.addObject(std::make_shared<Ball>(colliding_ball_1));
+//
+//    Ball colliding_ball_2(glm::vec3(0.1, 1, 0), 1, 0.5);
+//    physics.addObject(std::make_shared<Ball>(colliding_ball_2));
+////    colliding_ball_2.rigidBody->setForce(glm::vec3(0.0f, 9.8f/2, 0.0f));
+//
+//    Ball colliding_ball_3(glm::vec3(-3, 7, 0), 1, 0.6);
+//    physics.addObject(std::make_shared<Ball>(colliding_ball_3));
+
+    Ball colliding_ball_1(glm::vec3(-3, 1, 0), 1, 0);
     physics.addObject(std::make_shared<Ball>(colliding_ball_1));
+    colliding_ball_1.rigidBody->velocity = glm::vec3(1, 0, 0);
+    colliding_ball_1.rigidBody->mass = 2;
+
+    Ball colliding_ball_2(glm::vec3(5, 1, 0), 1, 1);
+    physics.addObject(std::make_shared<Ball>(colliding_ball_2));
+    colliding_ball_2.rigidBody->velocity = glm::vec3(-1, 0, 0);
     colliding_ball_1.rigidBody->mass = 1;
 
-    Ball colliding_ball_2(glm::vec3(1.5, 2, 0), 1, 0.6);
-    physics.addObject(std::make_shared<Ball>(colliding_ball_2));
-    colliding_ball_2.rigidBody->setForce(glm::vec3(0.0f, 9.8f/2, 0.0f));
-
-    Ball colliding_ball_3(glm::vec3(-3, 7, 0), 1, 0.6);
-    physics.addObject(std::make_shared<Ball>(colliding_ball_3));
 
     Plane plane(glm::vec3(-5, 0, -5), 10, 10);
     physics.addObject(std::make_shared<Plane>(plane));

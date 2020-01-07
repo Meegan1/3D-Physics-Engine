@@ -61,15 +61,26 @@ public:
     }
 
     static void resolveCollision(const std::shared_ptr<Object> &object, const std::shared_ptr<Object> &other) {
-        Collision collision = object->collider->collides(*other->collider);
-        if(collision.hasCollided) {
-            float d = glm::dot(object->rigidBody->velocity, collision.normal);
+        Collision collision_a = object->collider->collides(*other->collider);
+        Collision collision_b = other->collider->collides(*object->collider);
 
-            float j = glm::max(-(1 + object->rigidBody->getRC()) * d, 0.0f);
+        if(collision_a.hasCollided && collision_b.hasCollided) {
+            float d_a = glm::dot(object->rigidBody->velocity, collision_a.normal);
+            float d_b = glm::dot(other->rigidBody->velocity, collision_b.normal);
 
-            object->rigidBody->velocity += j * collision.normal;
+            float m_a = 2*(other->rigidBody->mass) / (object->rigidBody->mass + other->rigidBody->mass);
+            float m_b = 2*(object->rigidBody->mass) / (object->rigidBody->mass + other->rigidBody->mass);
 
-            object->position = collision.point + (collision.offset * -collision.direction);
+            float rc = glm::min(object->rigidBody->getRC(), other->rigidBody->getRC());
+
+            float j_a = glm::max(-(1 + rc * m_a) * d_b, 0.0f);
+            float j_b = glm::max(-(1 + rc * m_b) * d_a, 0.0f);
+
+            object->rigidBody->velocity += j_a * collision_a.normal;
+            other->rigidBody->velocity += j_b * collision_b.normal;
+
+            object->position = collision_a.point + (collision_a.offset * -collision_a.direction);
+            other->position = collision_b.point + (collision_b.offset * -collision_b.direction);
         }
     }
 
@@ -83,7 +94,21 @@ public:
 
             curr_object->updateCollider();
             object->updateCollider();
-            resolveCollision(curr_object, object);
+
+            if(object->hasRigidBody())
+                resolveCollision(curr_object, object);
+            else {
+                Collision collision = curr_object->collider->collides(*object->collider);
+                if (collision.hasCollided) {
+                    float d = glm::dot(curr_object->rigidBody->velocity, collision.normal);
+
+                    float j = glm::max(-(1 + curr_object->rigidBody->getRC()) * d, 0.0f);
+
+                    curr_object->rigidBody->velocity += j * collision.normal;
+
+                    curr_object->position = collision.point + (collision.offset * -collision.direction);
+                }
+            }
         }
     };
 
