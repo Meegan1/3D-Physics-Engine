@@ -20,8 +20,8 @@ public:
 
     float radius;
 
-    Collision collides(const PlaneCollider &other) override;
-    Collision collides(const SphereCollider &other) override;
+    Collision collides(PlaneCollider &other) override;
+    Collision collides(SphereCollider &other) override;
 };
 
 

@@ -14,9 +14,9 @@ public:
 
     Collision collides(Collider &other) override;
 
-    Collision collides(const SphereCollider &other) override;
+    Collision collides(SphereCollider &other) override;
 
-    Collision collides(const PlaneCollider &other) override;
+    Collision collides(PlaneCollider &other) override;
 
     glm::vec3 closestPoint(const glm::vec3 &point) override;
 

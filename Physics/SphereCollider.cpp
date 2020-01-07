@@ -16,12 +16,12 @@ Collision SphereCollider::collides(Collider &other) {
 }
 
 
-Collision SphereCollider::collides(const SphereCollider &other) {
+Collision SphereCollider::collides(SphereCollider &other) {
     return false;
 }
 
 
-Collision SphereCollider::collides(const PlaneCollider &other) {
+Collision SphereCollider::collides(PlaneCollider &other) {
     GLfloat distance = Collider::distance(*this, other.position);
     return distance < radius;
 }

@@ -74,7 +74,7 @@ public:
             Collision collision = curr_object->collider->collides(*object->collider);
             if(collision.hasCollided) {
                 velocity.y = (-velocity.y * getRC());
-                curr_object->position.y = object->position.y + collision.offset;
+                curr_object->position = collision.point + (collision.offset * -collision.direction);
             }
         }
     };

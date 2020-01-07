@@ -11,9 +11,14 @@
 struct Collision {
     GLboolean hasCollided;
     GLfloat offset;
+    glm::vec3 direction;
+    glm::vec3 point;
 
     Collision(GLboolean hasCollided) : hasCollided(hasCollided), offset(0) {}
     Collision(GLboolean hasCollided, GLfloat offset) : hasCollided(hasCollided), offset(offset) {}
+
+    Collision(GLboolean hasCollided, GLfloat offset, const glm::vec3 &direction, const glm::vec3 &point) : hasCollided(
+            hasCollided), offset(offset), direction(direction), point(point) {}
 };
 
 class SphereCollider;
@@ -24,8 +29,8 @@ public:
     Collider(const glm::vec3 &position) : position(position) {}
     virtual Collision collides(Collider &other) = 0;
 
-    virtual Collision collides(const SphereCollider &other) = 0;
-    virtual Collision collides(const PlaneCollider &other) = 0;
+    virtual Collision collides(SphereCollider &other) = 0;
+    virtual Collision collides(PlaneCollider &other) = 0;
 
     virtual glm::vec3 closestPoint(const glm::vec3 &point) = 0;
 
