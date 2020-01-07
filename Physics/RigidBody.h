@@ -73,7 +73,6 @@ public:
 
             Collision collision = curr_object->collider->collides(*object->collider);
             if(collision.hasCollided) {
-                qDebug() << "Collision";
                 velocity.y = (-velocity.y * getRC());
                 curr_object->position.y = object->position.y + collision.offset;
             }

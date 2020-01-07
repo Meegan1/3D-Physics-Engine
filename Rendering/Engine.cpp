@@ -41,12 +41,12 @@ void Engine::initializeGL() {
     /*
      * Setup Physics Engine
      */
-    physics.setGravity(glm::vec3(0, -9.8f, 0));
+    physics.setGravity(glm::vec3(-0.1, -9.8f, 0));
 
     Ball ball(glm::vec3(0, 10, 0), 1, 0.6);
     physics.addObject(std::make_shared<Ball>(ball));
 
-    Plane plane(glm::vec3(0, 0, 0), 10, 10);
+    Plane plane(glm::vec3(-5, 0, -5), 10, 10);
     physics.addObject(std::make_shared<Plane>(plane));
 
     startLoop(); // start game loop

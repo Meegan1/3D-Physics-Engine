@@ -16,6 +16,8 @@ public:
 
     Collision collides(Collider &other) override;
 
+    glm::vec3 closestPoint(const glm::vec3 &point) override;
+
     float radius;
 
     Collision collides(const PlaneCollider &other) override;

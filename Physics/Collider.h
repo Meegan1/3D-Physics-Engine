@@ -27,6 +27,10 @@ public:
     virtual Collision collides(const SphereCollider &other) = 0;
     virtual Collision collides(const PlaneCollider &other) = 0;
 
+    virtual glm::vec3 closestPoint(const glm::vec3 &point) = 0;
+
+    static GLfloat distance(const SphereCollider &sphere, const glm::vec3 &point);
+
     glm::vec3 position;
 };
 

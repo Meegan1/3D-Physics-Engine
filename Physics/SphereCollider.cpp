@@ -22,12 +22,10 @@ Collision SphereCollider::collides(const SphereCollider &other) {
 
 
 Collision SphereCollider::collides(const PlaneCollider &other) {
-//    GLfloat distance = std::sqrt((other.position->x - position.x) * (other.position.x - position.x) +
-//                             (other.position.y - position.y) * (other.position.y - position.y) +
-//                             (other.position.z - position.z) * (other.position.z - position.z));
-//    return distance < radius;
-    //    if(position.y <= plane.position.y + radius)
-//        return true;
-////        velocity.y = (-velocity.y * getRC());
-////        position.y = intersection + radius;
+    GLfloat distance = Collider::distance(*this, other.position);
+    return distance < radius;
+}
+
+glm::vec3 SphereCollider::closestPoint(const glm::vec3 &point) {
+    return glm::normalize(point - position) * radius;
 }

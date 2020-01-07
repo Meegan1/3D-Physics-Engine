@@ -10,13 +10,17 @@
 
 class PlaneCollider : public Collider {
 public:
-    PlaneCollider(const glm::vec3 &position) : Collider(position) {}
+    PlaneCollider(const glm::vec3 &position, GLfloat width, GLfloat height) : Collider(position), width(width), height(height) {}
 
     Collision collides(Collider &other) override;
 
     Collision collides(const SphereCollider &other) override;
 
     Collision collides(const PlaneCollider &other) override;
+
+    glm::vec3 closestPoint(const glm::vec3 &point) override;
+
+    GLfloat width, height;
 };
 
 
