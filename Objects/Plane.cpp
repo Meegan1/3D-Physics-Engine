@@ -6,7 +6,7 @@
 #include "Plane.h"
 
 Plane::Plane(glm::vec3 position, int height, int width) : Object(position), height(height), width(width) {
-
+    collider = new PlaneCollider(this->position);
 }
 
 void Plane::draw() {
@@ -22,10 +22,6 @@ void Plane::draw() {
         }
     }
     glPopMatrix();
-}
-
-void Plane::update(const GLfloat &delta_time) {
-
 }
 
 void Plane::drawQuad(float x, float y) {

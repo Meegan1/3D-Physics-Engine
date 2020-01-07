@@ -12,7 +12,6 @@ class Ball : public Object {
 public:
     explicit Ball(const glm::vec3 &position, float radius, float restitution_coefficient);
     void draw() override;
-    void update(const GLfloat &delta_time) override;
     void reset();
 
     float radius;

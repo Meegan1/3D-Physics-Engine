@@ -12,7 +12,7 @@ SET(Engine_HDRS ${QtTest_HDRS} Rendering/Engine.h Rendering/ObjectDialog.h)
 
 QT5_WRAP_CPP(Engine_HDRS_MOC ${Engine_HDRS})
 
-add_executable(Assignment_2 main.cpp Rendering/Engine.cpp ${Engine_HDRS_MOC} Objects/Ball.cpp Objects/Ball.h Rendering/Camera.cpp Rendering/Camera.h Physics/PhysicsEngine.cpp Physics/PhysicsEngine.h Physics/RigidBody.h Objects/Plane.cpp Objects/Plane.h Objects/Object.h Rendering/ObjectDialog.cpp Rendering/QFPS.cpp Rendering/QFPS.h Physics/Sphere.cpp Physics/Sphere.h)
+add_executable(Assignment_2 main.cpp Rendering/Engine.cpp ${Engine_HDRS_MOC} Objects/Ball.cpp Objects/Ball.h Rendering/Camera.cpp Rendering/Camera.h Physics/PhysicsEngine.cpp Physics/PhysicsEngine.h Physics/RigidBody.h Objects/Plane.cpp Objects/Plane.h Objects/Object.h Rendering/ObjectDialog.cpp Rendering/QFPS.cpp Rendering/QFPS.h Physics/SphereCollider.cpp Physics/SphereCollider.h Physics/Collider.h Physics/PlaneCollider.cpp Physics/PlaneCollider.h Objects/Object.cpp)
 
 target_link_libraries(Assignment_2 Qt5::Widgets)
 

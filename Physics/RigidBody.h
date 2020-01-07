@@ -9,10 +9,15 @@
 #include <gltypes.h>
 #include <glm/glm.hpp>
 #include <QElapsedTimer>
+#include <vector>
+
+#include "../Objects/Object.h"
+#include "Collider.h"
+#include "qdebug.h"
 
 class RigidBody {
 public:
-    explicit RigidBody(glm::vec3 &position, float mass, float restitution_coefficient) : mass(mass),
+    explicit RigidBody(const glm::vec3 &position, float mass, float restitution_coefficient) : mass(mass),
                                                                                         RESTITUTION_COEFFICIENT(restitution_coefficient),
                                                                                         o_position(position) {};
 
@@ -55,12 +60,30 @@ public:
         return RESTITUTION_COEFFICIENT;
     }
 
-    virtual void collision(glm::vec3 &position, const glm::vec3 &intersection) {};
+    void collision(std::shared_ptr<Object> curr_object, const std::vector<std::shared_ptr<Object>> &objects) {
+        for(const auto& object : objects) {
+            if(curr_object == object) // ignore if same object
+                continue;
+
+            if(curr_object->collider == nullptr || object->collider == nullptr) // continue if no collider
+                continue;
+
+            curr_object->updateCollider();
+            object->updateCollider();
+
+            Collision collision = curr_object->collider->collides(*object->collider);
+            if(collision.hasCollided) {
+                qDebug() << "Collision";
+                velocity.y = (-velocity.y * getRC());
+                curr_object->position.y = object->position.y + collision.offset;
+            }
+        }
+    };
 
     float mass;
     glm::vec3 o_position{0, 0, 0}; // original position
     glm::vec3 force{0, 0, 0};
-    glm::vec3 gravity{0, -9.8, 0};
+    glm::vec3 gravity{0, 0, 0};
     glm::vec3 acceleration{0, 0, 0};
     glm::vec3 velocity{0, 0, 0};
 

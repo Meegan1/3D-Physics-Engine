@@ -5,13 +5,13 @@
 #include <gl.h>
 #include <GLUT/glut.h>
 #include "Ball.h"
-#include "../Physics/Sphere.h"
+#include "../Physics/SphereCollider.h"
 
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 Ball::Ball(const glm::vec3 &position, float radius, float restitution_coefficient) : Object(position), radius(radius) {
-    Sphere sphere(position, 0.5, 0.6, 1);
-    rigidBody = std::make_shared<Sphere>(sphere);
+    rigidBody = std::make_shared<RigidBody>(RigidBody(position, 0.5, 0.6));
+    collider = new SphereCollider(this->position, radius);
 }
 
 void Ball::draw() {
@@ -21,14 +21,6 @@ void Ball::draw() {
     glTranslated(position.x, position.y, position.z);
     glutSolidSphere(radius,50,50);
     glPopMatrix();
-}
-
-void Ball::update(const GLfloat &delta_time) {
-    if(rigidBody == nullptr)
-        return;
-
-    rigidBody->updateVelocity(delta_time);
-    position += rigidBody->getVelocity() * delta_time;
 }
 
 void Ball::reset() {
