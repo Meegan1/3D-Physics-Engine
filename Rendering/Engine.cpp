@@ -42,35 +42,30 @@ void Engine::initializeGL() {
      * Setup Physics Engine
      */
     physics.setGravity(glm::vec3(0, -9.8f, 0));
+    btn_gravity->setValue(physics.getGravity().y); // set gravity button to correct value
 
     // ball falling off side of plane
-//    Ball falling_ball(glm::vec3(-5.1, 1, 0), 1, 0.6);
-//    physics.addObject(std::make_shared<Ball>(falling_ball));
+    Ball falling_ball(glm::vec3(-5.1, 1, 0), 1, 0.6);
+    physics.addObject(std::make_shared<Ball>(falling_ball));
 
     /*
      * Balls colliding into eachother
      */
-//    Ball colliding_ball_1(glm::vec3(0, 10, 0), 1, 0.5);
-//    physics.addObject(std::make_shared<Ball>(colliding_ball_1));
-//
-//    Ball colliding_ball_2(glm::vec3(0.1, 1, 0), 1, 0.5);
-//    physics.addObject(std::make_shared<Ball>(colliding_ball_2));
-////    colliding_ball_2.rigidBody->setForce(glm::vec3(0.0f, 9.8f/2, 0.0f));
-//
-//    Ball colliding_ball_3(glm::vec3(-3, 7, 0), 1, 0.6);
-//    physics.addObject(std::make_shared<Ball>(colliding_ball_3));
-
-    Ball colliding_ball_1(glm::vec3(-5, 1, 0), 1, 1);
+    Ball colliding_ball_1(glm::vec3(0, 10, 0), 1, 0.6);
     physics.addObject(std::make_shared<Ball>(colliding_ball_1));
-    colliding_ball_1.rigidBody->velocity = glm::vec3(2, 0, 0);
-    colliding_ball_1.rigidBody->mass = 1;
 
-    Ball colliding_ball_2(glm::vec3(5, 1, 0), 1, 1);
+    Ball colliding_ball_2(glm::vec3(0.1, 1, 0), 1, 0.6);
     physics.addObject(std::make_shared<Ball>(colliding_ball_2));
-    colliding_ball_2.rigidBody->velocity = glm::vec3(-2, 0, 0);
-    colliding_ball_2.rigidBody->mass = 1;
 
+    Ball colliding_ball_3(glm::vec3(-3, 7, 0), 1, 0.6);
+    physics.addObject(std::make_shared<Ball>(colliding_ball_3));
 
+    Ball colliding_ball_4(glm::vec3(2, 7, -1), 1, 0.6);
+    physics.addObject(std::make_shared<Ball>(colliding_ball_4));
+
+    /*
+     * Plane
+     */
     Plane plane(glm::vec3(-5, 0, -5), 10, 10);
     physics.addObject(std::make_shared<Plane>(plane));
 
@@ -90,24 +85,46 @@ void Engine::initializeHUD() {
 
     // setup add object button
     btn_add_object = new QPushButton("Add Object", this);
-    btn_add_object->setGeometry(QRect(QPoint(200, 0),
+    btn_add_object->setGeometry(QRect(QPoint(0, 50),
                                    QSize(100, 50)));
+
+    // setup wind direction button
+    btn_set_wind = new QPushButton("Set Wind", this);
+    btn_set_wind->setGeometry(QRect(QPoint(100, 50),
+                                      QSize(100, 50)));
+
+    // setup wind strength control
+    btn_wind_strength = new QSpinBox(this);
+    btn_wind_strength->setGeometry(QRect(QPoint(205, 65),
+                               QSize(100, 20)));
+    btn_wind_strength->setSuffix(" g");
 
     // setup FPS Control
     btn_fps = new QSpinBox(this);
-    btn_fps->setGeometry(QRect(QPoint(300, 12),
-                               QSize(100, 25)));
+    btn_fps->setGeometry(QRect(QPoint(305, 15),
+                               QSize(100, 20)));
     btn_fps->setSuffix(" fps");
 
     fps_label = new QFPS(this);
-    fps_label->setGeometry(QRect(QPoint(400, 0),
+    fps_label->setGeometry(QRect(QPoint(405, 0),
                                  QSize(100, 50)));
+
+    // setup gravity Control
+    btn_gravity = new QDoubleSpinBox(this);
+    btn_gravity->setGeometry(QRect(QPoint(205, 15),
+                               QSize(100, 20)));
+    btn_gravity->setRange(-30, 30);
+    btn_gravity->setDecimals(1);
+    btn_gravity->setSuffix(" g");
 
     // connect buttons to slots
     connect(btn_play, SIGNAL (released()), this, SLOT (togglePause()));
     connect(btn_restart, SIGNAL (released()), this, SLOT (restart()));
     connect(btn_add_object, SIGNAL (released()), this, SLOT (addObjectDialog()));
     connect(btn_fps, SIGNAL (valueChanged(int)), this, SLOT (setFPS(int)));
+    connect(btn_set_wind, SIGNAL (released()), this, SLOT (setWindDirection()));
+    connect(btn_wind_strength, SIGNAL (valueChanged(int)), this, SLOT (setWindStrength(int)));
+    connect(btn_gravity, SIGNAL (valueChanged(double)), this, SLOT (setGravity(double)));
 }
 
 void Engine::startLoop() {
@@ -180,7 +197,7 @@ void Engine::paintGL() {
 
     glMultMatrixf(&camera.getView()[0][0]);
 
-    physics.draw();
+    physics.draw(); // draw objects
 
     GLfloat lightPos[] = {0, 3.0f, 0, 0};
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
@@ -191,7 +208,7 @@ void Engine::paintGL() {
 
 void Engine::mouseMoveEvent(QMouseEvent *event) {
     float sensitivity = 0.01;
-    if (event->buttons() & Qt::LeftButton) {
+    if (event->buttons() & Qt::LeftButton) { // left click to control rotation
         float xoffset = event->x() - last_m_pos.x();
         float yoffset = event->y() - last_m_pos.y();
 
@@ -199,7 +216,7 @@ void Engine::mouseMoveEvent(QMouseEvent *event) {
         yoffset *= sensitivity;
 
         camera.rotate(xoffset, yoffset);
-    } else if (event->buttons() & Qt::RightButton) {
+    } else if (event->buttons() & Qt::RightButton) { // right click to control translation
         float xoffset = last_m_pos.x() - event->x();
         float yoffset = last_m_pos.y() - event->y();
 
@@ -208,28 +225,40 @@ void Engine::mouseMoveEvent(QMouseEvent *event) {
         camera.pan(xoffset, yoffset);
     }
 
-    last_m_pos = event->pos();
+    last_m_pos = event->pos(); // store last mouse position
 }
 
 void Engine::mousePressEvent(QMouseEvent *event) {
-    last_m_pos = event->pos();
+    last_m_pos = event->pos(); // clear mouse position upon click
 }
 
+/*
+ * Zooms on scroll
+ */
 void Engine::wheelEvent(QWheelEvent *event) {
     camera.zoom(event->delta() * 0.05f);
 }
 
+/*
+ * Pause physics simulation
+ */
 void Engine::pause() {
     is_paused = true;
     btn_play->setText("Play");
 }
 
+/*
+ * Resume physics simulation
+ */
 void Engine::play() {
     elapsed_timer.restart();
     is_paused = false;
     btn_play->setText("Pause");
 }
 
+/*
+ * Toggle physics simulation
+ */
 void Engine::togglePause() {
     if(is_paused)
         play();
@@ -237,10 +266,16 @@ void Engine::togglePause() {
         pause();
 }
 
+/*
+ * Restart physics simulation
+ */
 void Engine::restart() {
     physics.reset();
 }
 
+/*
+ * Set FPS for frame governing
+ */
 void Engine::setFPS(int fps) {
     FPS = fps;
 
@@ -251,6 +286,9 @@ void Engine::setFPS(int fps) {
     }
 }
 
+/*
+ * Create dialog for adding object to scene
+ */
 void Engine::addObjectDialog() {
     bool ok;
     std::shared_ptr<Ball> ball = std::make_shared<Ball>(ObjectDialog::getBall(this, &ok));
@@ -258,9 +296,33 @@ void Engine::addObjectDialog() {
         physics.addObject(ball);
 }
 
+/*
+ * Update FPS counter
+ */
 void Engine::updateFPS(GLfloat time) {
     int FPS = 1/time;
     fps_label->updateFPS(FPS);
+}
+
+/*
+ * Update gravity
+ */
+void Engine::setGravity(double gravity) {
+    physics.setGravity(glm::vec3(0, gravity, 0));
+}
+
+/*
+ * Set wind strength
+ */
+void Engine::setWindStrength(int strength) {
+    physics.setGlobalForceStrength(strength);
+}
+
+/*
+ * Set wind in direction of camera
+ */
+void Engine::setWindDirection() {
+    physics.setGlobalForce(camera.forward(), btn_wind_strength->value());
 }
 
 #pragma clang diagnostic pop

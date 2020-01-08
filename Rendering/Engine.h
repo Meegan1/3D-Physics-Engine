@@ -40,13 +40,22 @@ public:
 
     void play();
 
+/*
+ * GUI Slots
+ */
 public slots:
     void togglePause();
     void restart();
     void setFPS(int fps);
+    void setGravity(double gravity);
     void addObjectDialog();
+    void setWindStrength(int strength);
+    void setWindDirection();
 
 protected:
+    /*
+     * OpenGL Methods
+     */
     void initializeGL() override;
 
     void startLoop();
@@ -66,6 +75,9 @@ protected:
 
     void wheelEvent(QWheelEvent *event) override;
 
+    /*
+     * class members
+     */
     bool is_done;
     bool is_paused;
     unsigned int FPS;
@@ -80,11 +92,17 @@ protected:
 private:
     void initializeHUD();
 
+    /*
+     * GUI buttons
+     */
     QPushButton *btn_play;
     QPushButton *btn_restart;
     QPushButton *btn_add_object;
     QSpinBox *btn_fps;
+    QPushButton *btn_set_wind;
+    QSpinBox *btn_wind_strength;
     QFPS *fps_label;
+    QDoubleSpinBox *btn_gravity;
 
     void updateFPS(GLfloat time);
 };

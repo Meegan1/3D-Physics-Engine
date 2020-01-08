@@ -18,9 +18,13 @@ public:
 
     void addObject(const std::shared_ptr<Object>& object);
     void setGravity(glm::vec3 g);
+    glm::vec3 getGravity();
+    void setGlobalForce(const glm::vec3 &direction, GLfloat strength);
+    void setGlobalForceStrength(GLfloat strength);
 protected:
     std::vector<std::shared_ptr<Object>> objects;
     glm::vec3 gravity{0, 0, 0};
+    glm::vec3 globalForce{0};
 };
 
 

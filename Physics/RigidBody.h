@@ -60,6 +60,9 @@ public:
         return RESTITUTION_COEFFICIENT;
     }
 
+    /*
+     * Resolve collision between two objects with RigidBody's
+     */
     static void resolveCollision(const std::shared_ptr<Object> &object, const std::shared_ptr<Object> &other) {
         Collision collision_a = object->collider->collides(*other->collider);
         Collision collision_b = other->collider->collides(*object->collider);
@@ -84,6 +87,9 @@ public:
         }
     }
 
+    /*
+     * Resolve collision for objects with Collider's
+     */
     void collision(const std::shared_ptr<Object> &curr_object, const std::vector<std::shared_ptr<Object>> &objects) {
         for(const auto& object : objects) {
             if(curr_object == object) // ignore if same object
@@ -110,7 +116,7 @@ public:
                         glm::vec3 friction = velocity - glm::dot(velocity, collision.normal) * collision.normal;
                         glm::vec3 direction = glm::normalize(friction);
                         if(!glm::all(glm::isnan(direction)))
-                            velocity -= direction * 0.005f;
+                            velocity -= direction * object->frictionCoefficient;
 
                     curr_object->position = collision.point + (collision.offset * -collision.direction);
                 }

@@ -13,6 +13,9 @@
 class Collider;
 class RigidBody;
 
+/*
+ * Base class for objects
+ */
 class Object {
 public:
     explicit Object(glm::vec3 position) : position(position){};
@@ -31,6 +34,7 @@ public:
     glm::vec3 position;
     std::shared_ptr<RigidBody> rigidBody;
     Collider *collider;
+    float frictionCoefficient{0};
 };
 
 #include "../Physics/RigidBody.h"

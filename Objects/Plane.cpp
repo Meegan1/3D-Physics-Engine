@@ -7,6 +7,7 @@
 
 Plane::Plane(glm::vec3 position, int width, int height) : Object(position), height(height), width(width) {
     collider = new PlaneCollider(this->position, width, height);
+    frictionCoefficient = 0.005f;
 }
 
 void Plane::draw() {

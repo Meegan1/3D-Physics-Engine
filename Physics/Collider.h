@@ -8,12 +8,15 @@
 #include "glm/glm.hpp"
 #include "gl.h"
 
+/*
+ * Struct to hold all necessary data from a collision
+ */
 struct Collision {
-    GLboolean hasCollided;
-    GLfloat offset;
-    glm::vec3 direction;
-    glm::vec3 point;
-    glm::vec3 normal;
+    GLboolean hasCollided; // if the object has collided
+    GLfloat offset; // offset for object (ie. sphere radius)
+    glm::vec3 direction; // direction of collision
+    glm::vec3 point; // point of collision
+    glm::vec3 normal; // collision normal
 
     Collision(GLboolean hasCollided) : hasCollided(hasCollided), offset(0) {}
     Collision(GLboolean hasCollided, GLfloat offset, const glm::vec3 &direction, const glm::vec3 &point, const glm::vec3 &normal) : hasCollided(
@@ -23,6 +26,9 @@ struct Collision {
 class SphereCollider;
 class PlaneCollider;
 
+/*
+ * Base class for a collider (utilises visitor design pattern)
+ */
 class Collider {
 public:
     Collider(const glm::vec3 &position) : position(position) {}
